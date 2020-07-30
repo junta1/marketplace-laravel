@@ -1,0 +1,38 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    mysql:
+      image: mysql:8.0
+      container_name: marketplace-mysql
+      working_dir: /application
+      volumes:
+        - ./infra:/application
+      environment:
+        - MYSQL_ROOT_PASSWORD=root
+        - MYSQL_DATABASE=marketplace_db
+        - MYSQL_USER=root
+        - MYSQL_PASSWORD=root
+      ports:
+        - "7880:3306"
+
+    webserver:
+      image: nginx:alpine
+      container_name: marketplace-webserver
+      working_dir: /application
+      volumes:
+          - ./api:/application
+          - ./devops/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "7878:80"
+
+    php-fpm:
+      build: devops/php-fpm
+      container_name: marketplace-php-fpm
+      working_dir: /application
+      volumes:
+        - ./api:/application
+        - ./devops/php-fpm/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
+
