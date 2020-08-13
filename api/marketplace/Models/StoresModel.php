@@ -2,6 +2,7 @@
 
 namespace Marketplace\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class StoresModel extends Model
@@ -17,4 +18,14 @@ class StoresModel extends Model
         'stor_mobile_phone',
         'stor_slug',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(ProductsModel::class);
+    }
 }
